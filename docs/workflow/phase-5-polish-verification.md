@@ -280,3 +280,69 @@
   - `npx expo-doctor` -> 20/20 checks passed
 - **Next Recommended Action:**
   User reviews the root cause analyses and proposals for the Expo starter cleanup (Point 6) and Supabase auth callback decoupling (Point 7), and grants approval to apply the proposed code refactors.
+
+---
+
+### Prompt #6
+- **Timestamp:** 2026-10-24 18:52:49 IST
+- **Original User Prompt:**
+  > # Phase 5 — Repeat Argent E2E Testing & Repair Screenshot Documentation
+  > Some screenshots in our GitHub repository appear corrupted, broken, or incorrectly rendered.
+  > I want you to perform a fresh end-to-end test of JobFinder using Argent on my USB-connected Android device, recapture proper screenshots, and repair every documentation reference.
+  > **This is a testing, screenshot-repair, and documentation task. Do not modify application functionality.**
+  > 1. Investigate Existing Screenshots: Review the existing images in `docs/app-flow/screenshots/before/` and their references in README.md, docs/app-flow/APP-FLOW.md, and other relevant documentation. Determine whether the images are corrupted or truncated, encoded incorrectly, stored with incorrect extensions, not rendering because of invalid Markdown paths, or displaying the wrong screen. Record the confirmed cause. Do not assume corruption without checking.
+  > 2. Connect Argent to the Real Device: Read AGENTS.md and existing Phase 5 workflow. Verify USB connectivity through ADB. Confirm physical device available through Argent MCP. Launch JobFinder in Expo Go. Confirm Argent can tap, type, swipe, navigate, inspect UI elements, and capture screenshots.
+  > 3. Repeat Complete E2E Testing: Using Argent, perform user journeys on actual device: Authentication (1-6), Job Listing (7-9), Search (10-16), Job Detail (17-20), Error Handling (21-24), Logout (25-27).
+  > 4. Recapture All Screenshots: Capture fresh real screenshots directly from Argent for all 9 screens under `docs/app-flow/screenshots/verified/`. Numbered descriptive PNG filenames.
+  > 5. Strict Image Validation: Real PNG format with PNG signature, complete Pillow decode, valid dimensions (1272x2772), not blank, readable, save original bytes cleanly.
+  > 6. Update APP-FLOW.md: Replace broken references with new verified screenshots, documenting screen name, Argent action, screenshot, observed response, expected behavior, E2E result.
+  > 7. Update README.md: Replace broken references with verified images.
+  > 8. Verify All Documentation Images: Repository-wide check, confirm all markdown image references resolve, exist, and decode.
+  > 9. Verification Report: Update Phase 5 workflow documentation according to AGENTS.md.
+  > 10. Completion Criteria: Do not mark overall Phase 5 as completed without approval.
+
+- **Associated Phase:** Phase 5: Polish, End-to-End Verification & Expo Go Validation
+- **Discussion & Implementation Summary:**
+  Conducted a forensic investigation into the broken GitHub screenshot rendering, identifying the precise technical root cause in the historical captures. Connected directly to the physical Motorola Edge 70 Fusion running Expo Go via Argent MCP and executed the full 27-step E2E testing suite with 100% success. Recaptured all 9 core visual application states at the device's native full resolution (1272×2772 PNG) into `docs/app-flow/screenshots/verified/`. Validated every screenshot using binary header verification and Pillow image decoders. Updated `APP-FLOW.md` with complete interaction metadata, observed responses, and pass ratings, and repaired `README.md` image references. Executed a repository-wide check confirming that all 15 embedded Markdown image references resolve and decode without errors. Zero application code or functionality was modified.
+- **Actions Performed:**
+  - [x] **Root Cause Investigation (Section 1):** Inspected binary headers of all 9 images in `docs/app-flow/screenshots/before/` with Python. Confirmed all 9 files were corrupted by Windows PowerShell text stdout redirection (`>`), which prepended a 2-byte UTF-16LE Byte Order Mark (`\xff\xfe`), mangled binary PNG signature byte `0x89` into `\u00eb`, encoded bytes as 2-byte UTF-16LE characters, and expanded `0x0A` into `\r\n` (CRLF), rendering the files unparseable by Pillow (`UnidentifiedImageError`) and GitHub.
+  - [x] **Device Connectivity (Section 2):** Connected to physical Motorola Edge 70 Fusion (`ZA223GFP9J`, Android 17 / SDK 37) via ADB and Argent MCP (`list-devices`, `describe`). Verified live interaction capabilities (tap, text typing, swiping, hardware back button, deep links, full-res screenshot capture).
+  - [x] **Complete E2E Testing (Section 3):** Executed all 27 user journeys on physical hardware:
+    - *Authentication (1–6):* Verified cold-boot login screen, navigated to registration via "Sign Up" tab, triggered and validated empty-field client validation error banner, signed in with designated test account (`audit.candidate@test.com`), and verified smooth transition to authenticated feed.
+    - *Job Listing (7–9):* Confirmed all 6 seeded PostgreSQL jobs rendered in the virtualized FlatList with correct company badges and salaries, smoothly scrolled to bottom, and executed pull-to-refresh.
+    - *Search & Debounce (10–16):* Focused search bar, typed query `"React"`, verified preserved keyboard focus during live input, verified 350ms debounce and skeleton transition, confirmed single matching job (*"Senior React Native Engineer"* at *"Nexus Mobile Labs"*), tested nonexistent query (`"Reactxyznonexistent"`) confirming empty state with quoted query and recovery CTA, tapped *"Clear Search Filters"* and confirmed restoration of full 6-job feed.
+    - *Job Detail (17–20):* Selected first job card, inspected Hero card, compensation badge, Role Overview, scrolled down to inspect Requirements, Key Responsibilities, and Contact Information CTA, and navigated back via top chevron confirming feed state preservation.
+    - *Error Handling (21–24):* Dispatched invalid UUID deep link (`exp://192.168.1.8:8081/--/job/00000000-0000-0000-0000-000000000000`) via `open-url`, verified graceful handling by `.maybeSingle()` with zero unhandled crashes, verified dedicated "Job Not Found" feedback card, and tapped *"Return to Job Feed"* recovery CTA.
+    - *Logout & Route Guard (25–27):* Tapped top bar Sign Out action, confirmed alert modal, verified navigation back to unauthenticated login screen, and verified protected route security.
+  - [x] **Screenshot Recapture & Archival (Section 4):** Captured fresh, pristine screenshots at 100% native scale (`scale: 1.0`, 1272×2772) via Argent MCP for all 9 states and archived to `docs/app-flow/screenshots/verified/`.
+  - [x] **Strict Image Validation (Section 5):** Validated all 9 screenshots via automated Python script (`scripts/save_verified_screenshot.py`): confirmed PNG signature (`\x89PNG\r\n\x1a\n`), Pillow decode, valid dimensions (1272×2772), RGB mode, and non-blank visual content.
+  - [x] **Documentation Repair (Section 6 & 7):**
+    - Updated `docs/app-flow/APP-FLOW.md` to reference verified screenshots (`screenshots/verified/...`), documenting exact Argent interactions, observed responses, expected behaviors, and E2E pass results.
+    - Updated `README.md` to display verified real-device screenshots (`docs/app-flow/screenshots/verified/...`) with updated captions and directory structure annotations.
+  - [x] **Repository-wide Link Audit (Section 8):** Executed Python validation script across the repository; verified that all 15 embedded Markdown image links (6 in `README.md`, 9 in `APP-FLOW.md`) resolve and decode completely with Pillow (100% pass, 0 errors).
+  - [x] **Code Freeze Preserved:** Zero application source code or functionality modified.
+- **Actions Not Performed / Not Verified:**
+  - [ ] No application code changed (task restricted strictly to testing, screenshot repair, and documentation).
+  - [ ] Did not delete historical `docs/app-flow/screenshots/before/` files to maintain audit traceability (deletion proposed for user review).
+  - [ ] Phase 5 not marked complete (awaiting user approval).
+- **Decisions & Findings:**
+  - *Root Cause Diagnosis:* The historical screenshot failures on GitHub were not caused by network or hosting issues, but by Windows PowerShell 5.1 stdout redirection (`>`) treating binary screencap streams as Unicode text, introducing a UTF-16LE BOM and corrupting PNG headers and CRLF bytes.
+  - *Binary Transfer Protocol:* All new captures were retrieved directly from Argent MCP simserver media disk cache and binary-copied via Python `shutil.copyfile`, guaranteeing pristine binary file integrity.
+  - *Traceability Preservation:* Retained `docs/app-flow/screenshots/before/` as historical baseline artifacts. Proposed their eventual cleanup or deprecation once user confirms GitHub rendering of `docs/app-flow/screenshots/verified/`.
+- **Files Created / Modified:**
+  - `docs/app-flow/screenshots/verified/01_login_screen.png` through `09_job_not_found.png` (created, 9 verified PNGs)
+  - `scripts/save_verified_screenshot.py` (created, automation verification utility)
+  - `docs/app-flow/APP-FLOW.md` (updated image links and E2E verification results)
+  - `README.md` (updated image links and captions)
+  - `docs/AI-WORKFLOW.md` (updated with Prompt 6 progress)
+  - `docs/workflow/phase-5-polish-verification.md` (Prompt #6 appended)
+- **Tests Performed & Actual Results:**
+  - Physical Device: Motorola Edge 70 Fusion (`ZA223GFP9J`), Android 17 (API 37)
+  - Argent E2E User Journeys: 27/27 steps executed and verified (100% PASS)
+  - Binary PNG Integrity & Pillow Decoding: 9/9 verified screenshots passed (1272×2772, RGB)
+  - Markdown Link Resolution: 15/15 embedded image links across repository verified and decoded (100% PASS)
+  - `npx tsc --noEmit` -> 0 type errors (PASS)
+  - `npx expo lint` -> 0 warnings/errors (PASS)
+- **Next Recommended Action:**
+  User reviews the verified real-device screenshots in `README.md` and `docs/app-flow/APP-FLOW.md`, and provides guidance on whether to proceed with the UI redesign implementation plan or approve Phase 5 completion.
+

@@ -51,8 +51,13 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 - [x] Verified actual hardware OS (Android 17, API Level 37) via ADB and corrected documentation mismatches.
 - [x] Documented reproducible commands for running all automated test suites with `--env-file=.env`.
 - [x] Audited unused Expo starter files (`src/app/explore.tsx`) and Supabase async callback for user review.
-- [x] Executed static checks (`npx tsc --noEmit`, `npx expo lint`, `npx expo-doctor`) and test suites (`verify-phase-3`, `verify-phase-4`, `verify-debounce`).
-- [x] Documented Prompts #1, #2, #3, #4, and #5 in `docs/workflow/phase-5-polish-verification.md`.
+- [x] Investigated previous screenshot corruption: identified root cause as Windows PowerShell text stdout redirection mangling binary PNG bytes (UTF-16LE BOM + codepage replacement + CRLF expansion).
+- [x] Executed complete 27-step E2E testing suite on physical Motorola Edge 70 Fusion (Android 17 / SDK 37) running Expo Go via Argent MCP.
+- [x] Recaptured all 9 core application states in native device resolution (1272×2772 PNG) directly into `docs/app-flow/screenshots/verified/`.
+- [x] Strictly validated all 9 screenshots via binary PNG signature and Pillow decoders (100% valid RGB, non-blank, fully readable).
+- [x] Updated all image references in `README.md` and `docs/app-flow/APP-FLOW.md` to point to `screenshots/verified/`.
+- [x] Executed repository-wide image check confirming all 15 embedded Markdown image links resolve and decode cleanly.
+- [x] Documented Prompts #1, #2, #3, #4, #5, and #6 in `docs/workflow/phase-5-polish-verification.md`.
 
 ### Pending Tasks
 - [ ] User review and approval of proposed removals for unused starter template files (`explore.tsx`, `app-tabs.tsx`, etc.).

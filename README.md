@@ -55,17 +55,17 @@ For an in-depth walkthrough of the user journey, state transitions, and Argent i
 
 👉 **[Visual Application Walkthrough (docs/app-flow/APP-FLOW.md)](docs/app-flow/APP-FLOW.md)**
 
-### Baseline Screenshots (Captured on Motorola Edge 70 Fusion / Android 17)
+### Verified Real-Device Screenshots (Motorola Edge 70 Fusion / Android 17)
 
 | 1. Sign In Screen | 2. Job Listings Feed | 3. Live Debounced Search |
 |:---:|:---:|:---:|
-| ![Sign In](docs/app-flow/screenshots/before/01_login_screen.png) | ![Job Listings](docs/app-flow/screenshots/before/04_job_listing_screen.png) | ![Search](docs/app-flow/screenshots/before/05_search_results.png) |
+| ![Sign In](docs/app-flow/screenshots/verified/01_login_screen.png) | ![Job Listings](docs/app-flow/screenshots/verified/04_job_listing_screen.png) | ![Search](docs/app-flow/screenshots/verified/05_search_results.png) |
 
 | 4. Empty Search State | 5. Job Details (Top) | 6. Job Details (Bottom) |
 |:---:|:---:|:---:|
-| ![Empty State](docs/app-flow/screenshots/before/06_empty_search_results.png) | ![Job Detail Top](docs/app-flow/screenshots/before/07_job_detail_top.png) | ![Job Detail Bottom](docs/app-flow/screenshots/before/08_job_detail_bottom.png) |
+| ![Empty State](docs/app-flow/screenshots/verified/06_empty_search_results.png) | ![Job Detail Top](docs/app-flow/screenshots/verified/07_job_detail_top.png) | ![Job Detail Bottom](docs/app-flow/screenshots/verified/08_job_detail_bottom.png) |
 
-> *Note: The images above represent baseline screenshots captured on physical hardware prior to final Phase 5 theme token consolidation.*
+> *Note: The images above represent 100% verified authentic captures (1272×2772 native PNG) from a physical Motorola Edge 70 Fusion driven via Argent MCP and validated with binary integrity checks.*
 
 ---
 
@@ -135,7 +135,7 @@ myjobfinder/
 │   ├── AI-WORKFLOW.md       # Master tracking dashboard and phase milestones
 │   ├── app-flow/            # Visual user journey, walkthrough, and screenshots
 │   │   ├── APP-FLOW.md      # Detailed screen walkthrough with Mermaid diagrams
-│   │   └── screenshots/     # Baseline device screenshots (before/after)
+│   │   └── screenshots/     # Verified and baseline real-device screenshots (verified/before)
 │   └── workflow/            # Comprehensive chronological phase logs (Phase 0–5)
 ├── scripts/                 # Automated Supabase verification and test suites
 │   ├── verify-phase-3.cjs   # Live query, RLS, and debounce search test suite
