@@ -6,9 +6,9 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 
 ## Current Development Phase
 
-**Phase 4: Job Detail Screen (Completed)**
-- **Objective:** Build dynamic item detail route (`/job/[id]`) displaying complete job metadata, requirements, responsibilities, compensation banner, not-found/error states, and seamless back navigation preserving feed state.
-- **Next Milestone:** Phase 5 — Final Polish, Testing & Documentation.
+**Phase 5: Polish, End-to-End Verification & Expo Go Validation (In Progress)**
+- **Objective:** Final technical and visual polish using Impeccable design guidance, theme token consolidation, native Android Material 3 conformance, 48dp touch targets, strict typing/linting checks, and end-to-end verification.
+- **Current Milestone:** UI/UX Design Audit completed; awaiting user approval of findings and visual direction before code implementation.
 
 ---
 
@@ -21,7 +21,7 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 | **Phase 2** | Database Schema & Authentication | Completed | [phase-2-database-auth.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-2-database-auth.md) |
 | **Phase 3** | Job Listing & Live Database Search | Completed | [phase-3-job-listing-search.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-3-job-listing-search.md) |
 | **Phase 4** | Job Detail Screen | Completed | [phase-4-job-detail.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-4-job-detail.md) |
-| **Phase 5** | Polish, End-to-End Verification & Expo Go Validation | Planned | [phase-5-polish-verification.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-5-polish-verification.md) |
+| **Phase 5** | Polish, End-to-End Verification & Expo Go Validation | In Progress | [phase-5-polish-verification.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-5-polish-verification.md) |
 
 ### Optional Backlog (Deferred Post-Core)
 - Guest Browsing Mode
@@ -33,39 +33,41 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 
 ---
 
-## Current Phase Progress (Phase 4 - Completed)
+## Current Phase Progress (Phase 5 - In Progress)
 
 ### Completed Tasks
-- [x] Implemented `fetchJobById(id)` in `src/services/jobs.service.ts` with UUID validation and `.maybeSingle()` query.
-- [x] Built TanStack Query hook `useJobDetail(id)` in `src/hooks/use-job-detail.ts` with 5-minute caching.
-- [x] Created dynamic screen `src/app/job/[id].tsx` with hero card, workplace badge, compensation banner, description, requirements, responsibilities, and contact employer action.
-- [x] Implemented animated loading skeleton matching detail view structure.
-- [x] Implemented friendly "Job Not Found" state with a direct "Return to Job Feed" CTA.
-- [x] Implemented network/query error state with "Try Again" and "Back to Feed" actions.
-- [x] Registered `job/[id]` in `src/app/_layout.tsx` Stack navigator with `slide_from_right` transition animation.
-- [x] Connected `JobCard.onPress` in `src/app/index.tsx` to navigate to `/job/[id]`.
-- [x] Provided back navigation via `router.back()`, strictly preserving feed search input, debounced query, and scroll position.
-- [x] Passed TypeScript check (`npx tsc --noEmit`) with 0 errors.
-- [x] Passed ESLint check (`npx expo lint`) with 0 errors.
-- [x] Automated verification suite `scripts/verify-phase-4.cjs` executed against live Supabase database with 16/16 checks passed.
-- [x] Regression testing for Phase 3 queries and debouncing executed and passed.
-- [x] User manual verification on physical device in Expo Go confirmed all 7/7 checks passing.
-- [x] Phase 4 acceptance criteria satisfied and marked Completed.
+- [x] Initialized Impeccable and verified runtime environment (`scripts/context.mjs`).
+- [x] Created `PRODUCT.md` according to Impeccable schema classifying the app platform as `android` native mobile.
+- [x] Connected to physical Android hardware (`motorola edge 70 fusion`, SDK 37) via USB.
+- [x] Captured 9 real-device baseline screenshots using Argent MCP and archived to `docs/app-flow/screenshots/before/`.
+- [x] Conducted in-depth visual validation on real hardware, comparing rendered UI against source-level audit predictions.
+- [x] Documented visually confirmed defects: dark-mode error banner contrast, title truncation, card fatigue, missing Android ripples, and undersized touch targets.
+- [x] Maintained strict zero-edit policy on application UI code and backend logic during audit pass.
+- [x] Documented Prompt #1 and Prompt #2 in `docs/workflow/phase-5-polish-verification.md`.
 
 ### Pending Tasks
-- [ ] User review and approval of Phase 5 (Final Polish, Testing & Documentation) plan.
+- [ ] User review and approval of the design audit findings and proposed visual direction.
+- [ ] Implement consolidated Design Tokens & System (`src/constants/theme.ts`).
+- [ ] Refactor `(auth)/login.tsx` for Android conformance, semantic theme tokens, accessible form inputs, and dark mode error contrast.
+- [ ] Refactor `index.tsx`, `job-card.tsx`, and `search-bar.tsx` with native touch feedback, 48dp targets, and screen reader labels.
+- [ ] Refactor `job/[id].tsx` with cohesive section hierarchy (resolving card fatigue) and enhanced typography.
+- [ ] Refactor loading skeletons, empty states, and error states with unified tokens.
+- [ ] Run full `npx tsc --noEmit` and confirm 0 errors.
+- [ ] Run `npx expo lint` and confirm 0 errors/warnings.
+- [ ] Validate end-to-end user workflows on physical Android device in Expo Go.
 
 ---
 
 ## Outstanding Issues & Decisions
 
-1. **UUID Format Pre-validation:** To avoid Postgres syntax errors when malformed strings or empty identifiers are passed, `fetchJobById` pre-validates IDs against a standard UUID regex before sending the query.
-2. **Missing Record Handling:** Used `.maybeSingle()` in Supabase queries. Non-existent IDs resolve gracefully to `null` instead of throwing a database exception, allowing the UI to render an informative "Job Not Found" state.
-3. **Feed State Preservation:** Navigation uses Expo Router's `router.push()` and `router.back()`. Popping the detail screen preserves the home feed's search input, debounced filter, and scroll position intact.
-4. **Phase 4 Verification Complete:** All functional requirements, database single-item queries, navigation flows, and UI checklists are 100% satisfied.
+1. **Platform Classification:** Formally specified `platform: android` in `PRODUCT.md` to guide audit against Material 3 rules, 48dp touch targets, Roboto typography scales, and Android navigation patterns.
+2. **Device Visual Verification Complete:** Connected to `motorola edge 70 fusion` (serial `ZA223GFP9J`). Interacted via Argent and captured 9 authentic baseline screenshots under `docs/app-flow/screenshots/before/`.
+3. **Visually Confirmed Defect #1 (Critical):** Error banner in dark mode renders in blinding pastel pink (`#FEE2E2`) with dark red text (`#991B1B`), failing dark mode visual harmony and contrast.
+4. **Visually Confirmed Defect #2 (Major):** Card title truncation caused by workplace badge placement in top row; severe card fatigue (6 stacked boxes) on Job Detail screen.
+5. **Zero-Code Policy Maintained:** No application source code or Supabase integration has been altered prior to user review and approval.
 
 ---
 
 ## Next Recommended Action
 
-User reviews the concise Phase 5 (Final Polish, Testing & Documentation) implementation plan and grants approval to begin execution.
+User reviews the visual audit findings, baseline screenshots, and final design proposal, and grants approval to begin Phase 5 implementation.
