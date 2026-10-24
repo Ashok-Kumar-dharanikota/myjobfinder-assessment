@@ -42,11 +42,13 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 - [x] Captured 9 real-device baseline screenshots using Argent MCP and archived to `docs/app-flow/screenshots/before/`.
 - [x] Conducted in-depth visual validation on real hardware, comparing rendered UI against source-level audit predictions.
 - [x] Documented visually confirmed defects: dark-mode error banner contrast, title truncation, card fatigue, missing Android ripples, and undersized touch targets.
-- [x] Maintained strict zero-edit policy on application UI code and backend logic during audit pass.
-- [x] Documented Prompt #1 and Prompt #2 in `docs/workflow/phase-5-polish-verification.md`.
+- [x] Authored comprehensive visual application walkthrough in `docs/app-flow/APP-FLOW.md` with embedded screenshots, Mermaid navigation diagram, and verified links.
+- [x] Overhauled root `README.md` into a production-grade, 10-section engineering showcase with verified architecture and setup guides.
+- [x] Maintained strict zero-edit policy on application UI code and backend logic during documentation passes.
+- [x] Documented Prompts #1, #2, #3, and #4 in `docs/workflow/phase-5-polish-verification.md`.
 
 ### Pending Tasks
-- [ ] User review and approval of the design audit findings and proposed visual direction.
+- [ ] User review and approval of the Phase 5 UI implementation roadmap.
 - [ ] Implement consolidated Design Tokens & System (`src/constants/theme.ts`).
 - [ ] Refactor `(auth)/login.tsx` for Android conformance, semantic theme tokens, accessible form inputs, and dark mode error contrast.
 - [ ] Refactor `index.tsx`, `job-card.tsx`, and `search-bar.tsx` with native touch feedback, 48dp targets, and screen reader labels.
@@ -62,12 +64,13 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 
 1. **Platform Classification:** Formally specified `platform: android` in `PRODUCT.md` to guide audit against Material 3 rules, 48dp touch targets, Roboto typography scales, and Android navigation patterns.
 2. **Device Visual Verification Complete:** Connected to `motorola edge 70 fusion` (serial `ZA223GFP9J`). Interacted via Argent and captured 9 authentic baseline screenshots under `docs/app-flow/screenshots/before/`.
-3. **Visually Confirmed Defect #1 (Critical):** Error banner in dark mode renders in blinding pastel pink (`#FEE2E2`) with dark red text (`#991B1B`), failing dark mode visual harmony and contrast.
-4. **Visually Confirmed Defect #2 (Major):** Card title truncation caused by workplace badge placement in top row; severe card fatigue (6 stacked boxes) on Job Detail screen.
-5. **Zero-Code Policy Maintained:** No application source code or Supabase integration has been altered prior to user review and approval.
+3. **Walkthrough & README Published:** `docs/app-flow/APP-FLOW.md` and `README.md` fully published with verified internal links and zero credentials exposed.
+4. **Visually Confirmed Defect #1 (Critical):** Error banner in dark mode renders in blinding pastel pink (`#FEE2E2`) with dark red text (`#991B1B`), failing dark mode visual harmony and contrast.
+5. **Visually Confirmed Defect #2 (Major):** Card title truncation caused by workplace badge placement in top row; severe card fatigue (6 stacked boxes) on Job Detail screen.
+6. **Zero-Code Policy Maintained:** No application source code or Supabase integration has been altered prior to user review and approval.
 
 ---
 
 ## Next Recommended Action
 
-User reviews the visual audit findings, baseline screenshots, and final design proposal, and grants approval to begin Phase 5 implementation.
+User reviews `README.md` and `docs/app-flow/APP-FLOW.md` and grants approval to begin Step 1 of the Phase 5 UI implementation plan (Consolidated Design Tokens).
