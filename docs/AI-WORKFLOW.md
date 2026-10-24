@@ -49,21 +49,27 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 - [x] Inspected Supabase credentials, dashboard locations, and security boundaries.
 - [x] Documented Prompt #3 scope deviation, root cause, necessity, and preventative rules.
 - [x] Migrated documentation into two-tier structure (Master Dashboard + `docs/workflow/` phase files).
+- [x] Created local `.env` with actual Supabase credentials and confirmed git-ignored.
+- [x] Reverted `.env.example` to generic placeholders to prevent credential tracking in git.
+- [x] Verified `@supabase/supabase-js` client initialization and session persistence via `AsyncStorage`.
+- [x] Verified live Supabase reachability (`auth/v1/health` HTTP 200, `auth/v1/settings` HTTP 200).
+- [x] Confirmed zero secret keys or privileged credentials exposed.
 
 ### Pending Tasks
-- [ ] User creation of local `.env` with actual `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`.
-- [ ] User review and approval to proceed to Phase 2.
+- [ ] User review and approval to mark Phase 1 complete and advance to **Phase 2: Database Schema & Authentication**.
 
 ---
 
 ## Outstanding Issues & Decisions
 
 1. **Scope Boundary Protocol:** The AI will not implement code or modify files outside the explicitly authorized prompt scope without prior user approval.
-2. **Supabase Credentials:** Real credentials in `.env` are required for live database operations in Phase 2/3.
-3. **Security Boundary:** Only client-safe keys (`Project URL` and `anon key`) belong in the mobile app; `service_role` and DB passwords must never be stored on the client.
+2. **Supabase Connectivity:** Verified live and reachable. Database tables (`jobs`, `profiles`) are pending creation in Phase 2.
+3. **Security Boundary:** Only client-safe keys (`Project URL` and `publishable/anon key`) are loaded into the mobile app via `.env`; `service_role` and DB passwords are never stored on the client.
 
 ---
 
 ## Next Recommended Action
 
-User provides Supabase project credentials in `.env` and grants approval to advance to **Phase 2: Database Schema & Authentication**.
+User grants approval to conclude Phase 1 and advance to **Phase 2: Database Schema & Authentication** (generating SQL schema, triggers, and RLS policies).
+
+
