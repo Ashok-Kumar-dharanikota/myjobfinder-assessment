@@ -58,54 +58,54 @@ These rules apply to any software project, regardless of its tech stack or purpo
 
 ## 2. Continuous Documentation
 
-Maintain a single file:
+Maintain a two-tier documentation system under `docs/`:
 
-`docs/AI-WORKFLOW.md`
+### Master Workflow Dashboard (`docs/AI-WORKFLOW.md`)
+A lightweight overview dashboard containing:
+- Current development phase and objective.
+- Overview of all planned phases and statuses, with links to their respective phase documents.
+- [x] Completed and [ ] pending tasks for the current phase.
+- Outstanding issues and decisions.
+- Next recommended action.
 
-Create it if it doesn't exist.
+*Do not store detailed prompt history in the master dashboard.*
 
-### Current Progress
+### Phase-Based Documentation (`docs/workflow/`)
+Maintain a dedicated directory with a separate Markdown file for each development phase using descriptive filenames (e.g. `docs/workflow/phase-<number>-<name>.md`).
 
-Keep this section at the top of the document:
+Every prompt, discussion, implementation, correction, and verification must be appended to its associated phase document.
 
-- Current phase and objective
-- All planned phases and their status
-- [x] Completed actions
-- [ ] Pending, blocked, or unverified actions
-- Outstanding issues
-- Next recommended action
+### Prompt Entry Requirements
+For EVERY user prompt, append to its corresponding phase document:
+- Sequential prompt number.
+- Actual timestamp in IST (Asia/Kolkata).
+- Original user prompt.
+- Associated development phase.
+- Brief discussion or implementation summary.
+- [x] Actions actually performed.
+- [ ] Actions not performed or not verified.
+- Decisions, scope boundaries, and missing requirements.
+- Files modified, if applicable.
+- Tests performed and actual results.
+- Next recommended action.
 
-### Prompt History
+Never delete or overwrite earlier prompt history. Preserve chronological order within each phase document.
 
-For EVERY user prompt, including discussions and questions, append:
-
-- Sequential prompt number
-- Actual timestamp in IST (Asia/Kolkata)
-- Original user prompt
-- Associated development phase
-- Brief discussion or implementation summary
-- [x] Actions actually performed
-- [ ] Actions not performed or not verified
-- Decisions and missing requirements
-- Files modified, if applicable
-- Tests performed and actual results
-- Next recommended action
-
-Never delete or overwrite earlier prompt history.
+If a prompt relates to an earlier phase, update that phase's document without incorrectly changing the current active phase on the master dashboard.
 
 If a timestamp is unavailable, state that instead of inventing one.
 
 ## 3. Development Rules
 
 - Inspect relevant code before making changes.
-- Implement only the requested scope.
+- Implement only the requested scope; never implement beyond the explicitly approved scope without prior user approval.
 - Avoid unnecessary complexity.
 - Review generated code for correctness, security, and maintainability.
 - Run relevant tests and checks where possible.
 - Never claim something works without verification.
 - Record real issues, corrections, and decisions.
 - Keep secrets out of source code and logs.
-- Update AI-WORKFLOW.md after every prompt.
+- Update both the master dashboard (`docs/AI-WORKFLOW.md`) and the relevant phase document (`docs/workflow/phase-*.md`) after every prompt.
 - Verify that documentation updates were saved successfully.
 
 ## 4. Response Format
