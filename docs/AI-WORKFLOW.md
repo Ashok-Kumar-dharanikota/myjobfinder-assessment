@@ -6,8 +6,8 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 
 ## Current Development Phase
 
-**Phase 2: Database Schema & Authentication**
-- **Objective:** Establish Supabase PostgreSQL database tables (`jobs`, `profiles`), configure Row Level Security (RLS) policies, implement automatic profile creation trigger (`handle_new_user`), build authentication screens (Login / Register), and manage persistent user sessions.
+**Phase 3: Job Listing & Live Database Search**
+- **Objective:** Replace temporary home screen with a live job feed querying Supabase `public.jobs` via TanStack Query, build debounced multi-field search, render loading skeletons, handle pull-to-refresh, display empty and connection error states, and preserve authentication & session persistence.
 
 ---
 
@@ -18,7 +18,7 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 | **Phase 0** | Architecture, Requirements Analysis & Planning | Completed | [phase-0-planning.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-0-planning.md) |
 | **Phase 1** | Foundation & Dependencies Setup | Completed | [phase-1-foundation.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-1-foundation.md) |
 | **Phase 2** | Database Schema & Authentication | Completed | [phase-2-database-auth.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-2-database-auth.md) |
-| **Phase 3** | Job Listing & Live Database Search | Planned | [phase-3-job-listing-search.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-3-job-listing-search.md) |
+| **Phase 3** | Job Listing & Live Database Search | In Progress | [phase-3-job-listing-search.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-3-job-listing-search.md) |
 | **Phase 4** | Job Detail Screen | Planned | [phase-4-job-detail.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-4-job-detail.md) |
 | **Phase 5** | Polish, End-to-End Verification & Expo Go Validation | Planned | [phase-5-polish-verification.md](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/docs/workflow/phase-5-polish-verification.md) |
 
@@ -32,54 +32,37 @@ Welcome to the development tracking dashboard for **JobFinder**. Detailed chrono
 
 ---
 
-## Current Phase Progress (Phase 2 - Completed)
+## Current Phase Progress (Phase 3 - In Progress)
 
 ### Completed Tasks
-- [x] Defined minimum database schema (`profiles`, `jobs`) with columns, constraints, and indexes.
-- [x] Hardened `handle_new_user()` `SECURITY DEFINER` trigger with `SET search_path = ''` and clean direct insert.
-- [x] Implemented `handle_profile_update()` as `SECURITY INVOKER` with `SET search_path = ''`, protecting immutable identity fields (`email`, `id`, `created_at`).
-- [x] Made schema creation idempotent (`DROP POLICY IF EXISTS`, `CREATE OR REPLACE FUNCTION`).
-- [x] Decoupled synthetic seed data into dedicated [`supabase/seed.sql`](file:///c:/Users/ASUS/OneDrive/Documents/Ashok%20Kumar/Job/Assessments/myjobfinder/supabase/seed.sql) with fixed deterministic UUIDs and `ON CONFLICT (id) DO NOTHING`.
-- [x] Formulated comprehensive 7-scenario RLS and trigger verification matrix.
-- [x] Verified `jobs` table contains all 6 sample jobs.
-- [x] Verified `profiles` table exists and anonymous reads return 0 rows.
-- [x] Verified anonymous writes to `jobs` and `profiles` are blocked by RLS (code 42501).
-- [x] Verified inactive jobs are hidden from anonymous and authenticated queries.
-- [x] Verified authenticated sign-up returns active session (with "Confirm email" OFF).
-- [x] Verified `handle_new_user()` trigger generates profile row in `public.profiles`.
-- [x] Verified authenticated user can read their own profile row.
-- [x] Verified authenticated user can update their own profile (`full_name`) and `updated_at` refreshes.
-- [x] Verified `handle_profile_update()` strictly blocks modifications to `email` and `id` (error P0001).
-- [x] Verified cross-user isolation: users cannot read or modify another user's profile.
-- [x] Verified authenticated users cannot insert or update records in `jobs` table (RLS enforced).
-- [x] Created `AuthContext` (`src/context/auth-context.tsx`) with session management, profile hydration, and AsyncStorage persistence.
-- [x] Built responsive, themed Login and Register screen at `src/app/(auth)/login.tsx` with input validation and error banners.
-- [x] Configured Expo Router route protection and initial session restoration gating in `src/app/_layout.tsx`.
-- [x] Upgraded authenticated home screen (`src/app/index.tsx`) with user profile card and sign-out functionality.
-- [x] Verified complete auth cycle (register -> profile fetch -> sign out -> sign in) via live Supabase automated tests.
-- [x] Passed TypeScript (`npx tsc --noEmit`) and ESLint (`npx expo lint`) checks with 0 errors.
-- [x] Completed user-reported manual device tests in Expo Go (registration, login, logout, session persistence, invalid credentials, protected navigation).
+- [x] Defined TypeScript interfaces for Job entities matching `public.jobs` schema (`src/types/job.ts`).
+- [x] Implemented `jobs.service.ts` with Supabase query functions supporting multi-field live search (`title`, `company`, `location`).
+- [x] Implemented `useDebounce` hook (`src/hooks/use-debounce.ts`) with 350ms throttle.
+- [x] Built TanStack Query hook (`useJobs`) with caching, background fetching, and pull-to-refresh refetching.
+- [x] Built reusable `JobCard` component (`src/components/job-card.tsx`) displaying title, company, location, employment type, workplace badge, skills pills, and salary range.
+- [x] Built reusable `SearchBar` component (`src/components/search-bar.tsx`) with focus border styling and instant clear action.
+- [x] Built `JobCardSkeleton` and `JobListSkeletonGroup` (`src/components/job-card-skeleton.tsx`) for animated loading states.
+- [x] Built `JobListEmpty` (`src/components/job-list-empty.tsx`) for zero search results and empty database feeds.
+- [x] Built `JobListError` (`src/components/job-list-error.tsx`) for network or database errors with retry capability.
+- [x] Replaced temporary home screen (`src/app/index.tsx`) with high-performance `FlatList` feed, pull-to-refresh, results counter, and user profile header with sign-out.
+- [x] Passed TypeScript type checks (`npx tsc --noEmit`) with 0 errors.
+- [x] Passed ESLint checks (`npx expo lint`) with 0 errors.
+- [x] Automated live Supabase testing completed with 9/9 verification checks passed (`scripts/verify-phase-3.cjs`).
 
 ### Pending Tasks
-- [ ] User approval to begin Phase 3 (Job Listing & Live Database Search).
+- [ ] User manual verification on physical device in Expo Go (feed rendering, live search, pull-to-refresh, empty state, logout).
+- [ ] User approval to conclude Phase 3 and advance to Phase 4 (Job Detail Screen).
 
 ---
 
 ## Outstanding Issues & Decisions
 
-1. **Backend & Security Verification: COMPLETE.** All PostgreSQL tables, foreign keys, triggers (`handle_new_user`, `handle_profile_update`), and Row Level Security policies have been tested against the live Supabase project and passed with 100% compliance.
-2. **Mobile Authentication: IMPLEMENTED & AUTOMATED-TESTED.** React Native `AuthContext`, screens, navigation gating, and session persistence are operational and verified.
-3. **Manual Device Verification: COMPLETE.** All 6 core authentication flows tested and confirmed passing on physical mobile device in Expo Go.
+1. **Server-Side Multi-Field Search:** Implemented directly in PostgreSQL using PostgREST `.or()` logic (`title.ilike`, `company.ilike`, `location.ilike`) with double-quote escaping to safely support multi-word search queries and comma-containing locations (e.g. `"Bengaluru, India"`).
+2. **React 19 Lint Compliance:** Resolved `react-hooks/refs` lint rule by initializing animated values via `useState(() => new Animated.Value(...))` lazy initializers.
+3. **Session & Auth Continuity:** Authenticated candidate profile header and sign-out functionality remain fully integrated into the home screen layout, preserving protected navigation.
 
 ---
 
 ## Next Recommended Action
 
-User grants approval to begin **Phase 3: Job Listing & Live Database Search** (planning query hooks with TanStack Query, designing Job Card component, search bar with debounce, and pull-to-refresh).
-
-
-
-
-
-
-
+User tests the job feed, search functionality, pull-to-refresh, and empty state in Expo Go on physical mobile device, then grants approval to advance to **Phase 4: Job Detail Screen**.
