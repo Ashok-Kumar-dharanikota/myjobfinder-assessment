@@ -55,7 +55,7 @@ For an in-depth walkthrough of the user journey, state transitions, and Argent i
 
 👉 **[Visual Application Walkthrough (docs/app-flow/APP-FLOW.md)](docs/app-flow/APP-FLOW.md)**
 
-### Baseline Screenshots (Captured on Motorola Edge 70 Fusion / Android 15)
+### Baseline Screenshots (Captured on Motorola Edge 70 Fusion / Android 17)
 
 | 1. Sign In Screen | 2. Job Listings Feed | 3. Live Debounced Search |
 |:---:|:---:|:---:|
@@ -72,15 +72,15 @@ For an in-depth walkthrough of the user journey, state transitions, and Argent i
 ## 5. Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher recommended; v20+ LTS preferred)
+- [Node.js (LTS)](https://nodejs.org/) (Node.js >= 22.13.0 or >= 24.3.0 required for Expo SDK 58; odd-numbered releases not supported)
 - [npm](https://www.npmjs.com/) (bundled with Node.js)
 - A [Supabase](https://supabase.com/) account and project
 - [Expo Go](https://expo.dev/go) app installed on an Android device, or an active Android emulator via Android Studio
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
-cd myjobfinder
+git clone https://github.com/Ashok-Kumar-dharanikota/myjobfinder-assessment.git
+cd myjobfinder-assessment
 ```
 
 ### 2. Install Dependencies
@@ -223,15 +223,25 @@ JobFinder has undergone rigorous, multi-tiered verification across all developme
   npx expo lint
   ```
 - **Live Database Integration Tests:**
-  - [`scripts/verify-phase-3.cjs`](scripts/verify-phase-3.cjs) — 8 automated checks verifying Supabase active job retrieval, multi-field search (`React`, `Aura`, `Remote`, `Pune`), comma handling, empty state responses, and RLS exclusion of inactive records.
-  - [`scripts/verify-phase-4.cjs`](scripts/verify-phase-4.cjs) — 16 automated checks verifying single-job UUID fetching, required metadata fields, `.maybeSingle()` non-existent handling, malformed UUID rejection, and search regression tests.
-  - [`scripts/verify-debounce.cjs`](scripts/verify-debounce.cjs) — 3 automated timing checks confirming search debounce thresholds and query coalescing.
+  Execute integration suites against your configured Supabase project using Node's native environment loader:
+  - [`scripts/verify-phase-3.cjs`](scripts/verify-phase-3.cjs) — 9 automated checks verifying Supabase active job retrieval, multi-field search (`React`, `Aura`, `Remote`, `Pune`), comma handling, empty state responses, and RLS exclusion of inactive records:
+    ```bash
+    node --env-file=.env scripts/verify-phase-3.cjs
+    ```
+  - [`scripts/verify-phase-4.cjs`](scripts/verify-phase-4.cjs) — 16 automated checks verifying single-job UUID fetching, required metadata fields, `.maybeSingle()` non-existent handling, malformed UUID rejection, and search regression tests:
+    ```bash
+    node --env-file=.env scripts/verify-phase-4.cjs
+    ```
+  - [`scripts/verify-debounce.cjs`](scripts/verify-debounce.cjs) — 3 automated timing checks confirming search debounce thresholds and query coalescing:
+    ```bash
+    node scripts/verify-debounce.cjs
+    ```
 
 ### Physical Device Verification (Expo Go)
 - Manually tested on physical Android hardware across full authentication lifecycles (registration, login, sign out), live database search, pull-to-refresh, deep-item inspection, and cold-boot session restoration.
 
 ### Argent Mobile Automation
-- Injected real touch gestures, text entry, keyboard dismissals, swipe scrolling, and deep-link routing on a connected **Motorola Edge 70 Fusion** (Android 15 / SDK 37) via Argent MCP, capturing all 9 baseline visual states documented in [`docs/app-flow/APP-FLOW.md`](docs/app-flow/APP-FLOW.md).
+- Injected real touch gestures, text entry, keyboard dismissals, swipe scrolling, and deep-link routing on a connected **Motorola Edge 70 Fusion** (Android 17 / API Level 37) via Argent MCP, capturing all 9 baseline visual states documented in [`docs/app-flow/APP-FLOW.md`](docs/app-flow/APP-FLOW.md).
 
 ### Impeccable Design Audit
 - Code-level and visual UI/UX design audit conducted against native Android Material 3 guidelines ([`docs/workflow/phase-5-polish-verification.md`](docs/workflow/phase-5-polish-verification.md)), establishing the visual roadmap for semantic tokenization and touch target enhancements.

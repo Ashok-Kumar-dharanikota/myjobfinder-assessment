@@ -205,5 +205,78 @@
 - **Next Recommended Action:**
   User reviews the updated `README.md` and grants approval to begin the UI polish implementation plan.
 
+---
 
+### Prompt #5
+- **Timestamp:** 2026-10-24 17:46:30 IST
+- **Original User Prompt:**
+  > Perform a final GitHub submission-readiness review of JobFinder.
+  > I independently reviewed the published repository and identified these issues:
+  > 1. Replace all local `file:///c:/...` links in `docs/AI-WORKFLOW.md` with portable relative Markdown links.
+  > 2. Correct README clone commands to use the real repository URL and `myjobfinder-assessment` directory.
+  > 3. Update Node.js prerequisites to match Expo SDK 58's official requirements.
+  > 4. Correct the Phase 3 automated test count from 8 to 9.
+  > 5. Investigate the Android version and API-level mismatch in README and APP-FLOW.md. Use actual device evidence to correct the values.
+  > 6. Review the unused Expo starter `explore.tsx` route and identify related template files that should be removed.
+  > 7. Review the asynchronous Supabase `onAuthStateChange` callback for compatibility and possible deadlocks.
+  > 8. Document reproducible commands for executing the existing automated tests with environment variables.
+  > 9. Check all documentation claims against the actual implementation and verification evidence.
+  > First fix the confirmed documentation errors.
+  > For potential application-code issues, report the root cause and proposed changes before modifying code.
+  > Run the available static checks and relevant tests, distinguish executed checks from unverified claims, and maintain the existing AGENTS.md workflow history.
+  > Do not add features, redesign screens, or mark Phase 5 complete without approval.
 
+- **Associated Phase:** Phase 5: Polish, End-to-End Verification & Expo Go Validation
+- **Discussion & Implementation Summary:**
+  Conducted a thorough submission-readiness audit across the codebase and documentation. Resolved all confirmed documentation inaccuracies immediately, validated actual runtime and device evidence, ran all static analysis and test suites, and formulated root cause analyses for potential code issues before modifying code:
+  1. **Documentation Link Portability (Point 1):** Replaced all local `file:///c:/...` URLs in `docs/AI-WORKFLOW.md` with clean relative paths (`workflow/phase-*.md`), ensuring full portability across GitHub and other environments.
+  2. **Clone Instructions (Point 2):** Corrected `README.md` repository URL to `https://github.com/Ashok-Kumar-dharanikota/myjobfinder-assessment.git` and clone directory to `myjobfinder-assessment`.
+  3. **Node.js Prerequisites (Point 3):** Verified Expo SDK 58 official requirements (`Node.js (LTS)`, requiring Node.js >= 22.13.0 or >= 24.3.0, excluding unsupported odd versions like Node 23/25). Updated `README.md` to reflect these exact runtime specifications (local environment is Node v22.20.0).
+  4. **Phase 3 Test Count (Point 4):** Audited `scripts/verify-phase-3.cjs` and confirmed exactly 9 assertion checks (1. retrieve 6 active jobs, 2. all required fields, 3. search title "React", 4. search company "Aura", 5. search location "Remote", 6. search location "Pune", 7. comma search "Bengaluru, India", 8. non-existent empty state query, 9. inactive jobs excluded). Corrected `README.md` from 8 to 9 checks.
+  5. **Android Version Mismatch Investigation (Point 5):** Queried physical hardware via `adb -s ZA223GFP9J shell`:
+     - `ro.build.version.release` = `17`
+     - `ro.build.version.sdk` = `37`
+     - `ro.product.model` = `motorola edge 70 fusion`
+     - `ro.build.display.id` = `A171WEH.36-18`
+     Confirmed the device runs **Android 17 (API Level 37)**. Corrected the erroneous "Android 15" label in `README.md` and `docs/app-flow/APP-FLOW.md`.
+  6. **Unused Starter Code Audit (Point 6):** Inspected `src/app/explore.tsx` and its dependency graph. Formulated root cause analysis and itemized 8 template files for proposed removal.
+  7. **Supabase Auth Async Deadlock Review (Point 7):** Analyzed `src/context/auth-context.tsx` against official Supabase JS v2 guidelines. Confirmed `await fetchProfile(userId)` inside `onAuthStateChange` risks deadlocks because internal client mutex locks remain acquired during async calls. Formulated decoupled architecture proposal for user review.
+  8. **Reproducible Test Execution (Point 8):** Documented exact commands utilizing Node's native `--env-file=.env` loader in Section 8 of `README.md`.
+  9. **Verification of Claims (Point 9):** Executed all static checks and automated integration suites against live Supabase and hardware.
+- **Actions Performed:**
+  - [x] Replaced all `file:///c:/...` links in `docs/AI-WORKFLOW.md` with relative links.
+  - [x] Corrected clone command in `README.md` to use real repository URL and `myjobfinder-assessment`.
+  - [x] Updated Node.js prerequisite in `README.md` to Expo SDK 58 specification (`>= 22.13.0`).
+  - [x] Corrected Phase 3 test count in `README.md` from 8 to 9 automated checks.
+  - [x] Investigated device properties with ADB and corrected Android version to Android 17 (API 37) in `README.md` and `docs/app-flow/APP-FLOW.md`.
+  - [x] Documented reproducible test commands with `--env-file=.env` in `README.md`.
+  - [x] Executed `node --env-file=.env scripts/verify-phase-3.cjs` -> 9/9 passed.
+  - [x] Executed `node --env-file=.env scripts/verify-phase-4.cjs` -> 16/16 passed.
+  - [x] Executed `node scripts/verify-debounce.cjs` -> 3/3 passed.
+  - [x] Executed `npx tsc --noEmit` -> 0 type errors.
+  - [x] Executed `npx expo lint` -> 0 warnings/errors.
+  - [x] Executed `npx expo-doctor` -> 20/20 checks passed.
+  - [x] Preserved zero-edit policy on application code pending user review of proposals for Points 6 & 7.
+- **Actions Not Performed / Not Verified:**
+  - [ ] Did not remove `explore.tsx` or template components (awaiting user approval of proposal).
+  - [ ] Did not modify `auth-context.tsx` (awaiting user approval of proposal).
+  - [ ] Did not mark Phase 5 complete.
+- **Decisions & Guidelines Adopted:**
+  - *Zero Hallucination / Ground Truth:* Hardware properties and test counts verified directly against active shell outputs and script definitions.
+  - *Safety on Application Code:* Maintained code-change freeze on potential issues until user reviews root cause and proposal.
+- **Files Modified:**
+  - `docs/AI-WORKFLOW.md` (relative links updated)
+  - `README.md` (clone URL, Node.js requirement, test count, test commands, Android 17 corrected)
+  - `docs/app-flow/APP-FLOW.md` (Android 17 / API 37 corrected)
+  - `docs/workflow/phase-5-polish-verification.md` (Prompt #5 appended)
+- **Tests Performed & Actual Results:**
+  - `adb shell getprop ro.build.version.release` -> `17`
+  - `adb shell getprop ro.build.version.sdk` -> `37`
+  - `node --env-file=.env scripts/verify-phase-3.cjs` -> 9/9 checks passed
+  - `node --env-file=.env scripts/verify-phase-4.cjs` -> 16/16 checks passed
+  - `node scripts/verify-debounce.cjs` -> 3/3 checks passed
+  - `npx tsc --noEmit` -> Exited 0 with 0 errors
+  - `npx expo lint` -> Exited 0 with 0 errors
+  - `npx expo-doctor` -> 20/20 checks passed
+- **Next Recommended Action:**
+  User reviews the root cause analyses and proposals for the Expo starter cleanup (Point 6) and Supabase auth callback decoupling (Point 7), and grants approval to apply the proposed code refactors.

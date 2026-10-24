@@ -4,7 +4,7 @@
 > **Backend & Database:** Supabase (Auth + PostgreSQL with Row-Level Security)  
 > **State & Data Caching:** TanStack Query v5  
 > **Navigation:** Expo Router (File-based Routing)  
-> **Physical Device:** Motorola Edge 70 Fusion (Android 15 / API Level 37)  
+> **Physical Device:** Motorola Edge 70 Fusion (Android 17 / API Level 37)  
 > **Verification Harness:** Argent MCP Mobile Interaction Engine & ADB  
 > **Date:** October 2026  
 
