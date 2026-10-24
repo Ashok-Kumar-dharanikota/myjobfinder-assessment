@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -62,80 +62,7 @@ export default function HomeScreen() {
     .substring(0, 2)
     .toUpperCase();
 
-  const renderHeader = () => (
-    <View style={styles.headerContainer}>
-      {/* App Bar */}
-      <View style={styles.appBar}>
-        <View style={styles.brandGroup}>
-          <View
-            style={[
-              styles.brandIconWrapper,
-              { backgroundColor: isDark ? '#1E293B' : '#EEF2FF' },
-            ]}>
-            <Ionicons name="briefcase" size={22} color={isDark ? '#818CF8' : '#4F46E5'} />
-          </View>
-          <View>
-            <Text style={[styles.brandTitle, { color: colors.text }]}>JobFinder</Text>
-            <Text style={[styles.greetingSubtitle, { color: isDark ? '#94A3B8' : '#64748B' }]}>
-              Find your next career move
-            </Text>
-          </View>
-        </View>
-
-        {/* User Pill with Sign Out */}
-        <View style={styles.userControlsGroup}>
-          <View
-            style={[
-              styles.userAvatar,
-              { backgroundColor: isDark ? '#3730A3' : '#4F46E5' },
-            ]}>
-            <Text style={styles.userAvatarText}>{initials || 'U'}</Text>
-          </View>
-
-          <TouchableOpacity
-            style={[
-              styles.signOutButton,
-              { backgroundColor: isDark ? '#1E293B' : '#F1F5F9' },
-            ]}
-            onPress={handleSignOut}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            accessibilityLabel="Sign out of JobFinder">
-            <Ionicons name="log-out-outline" size={20} color="#EF4444" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Search Input Bar */}
-      <View style={styles.searchSection}>
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="Search by title, company, or city..."
-          onClear={() => setSearchQuery('')}
-        />
-      </View>
-
-      {/* Section Subheading & Result Counter */}
-      <View style={styles.subheadingRow}>
-        <Text style={[styles.sectionHeading, { color: colors.text }]}>
-          {searchQuery.trim().length > 0 ? 'Search Results' : 'Explore Jobs'}
-        </Text>
-        {!isLoading && !isError && (
-          <View
-            style={[
-              styles.countPill,
-              { backgroundColor: isDark ? '#1E293B' : '#F1F5F9' },
-            ]}>
-            <Text style={[styles.countText, { color: isDark ? '#818CF8' : '#4F46E5' }]}>
-              {jobs.length} {jobs.length === 1 ? 'job' : 'jobs'}
-            </Text>
-          </View>
-        )}
-      </View>
-    </View>
-  );
-
-  const renderEmptyState = () => {
+  const renderEmptyState = useCallback(() => {
     if (isLoading) {
       return <JobListSkeletonGroup />;
     }
@@ -151,13 +78,13 @@ export default function HomeScreen() {
     }
     return (
       <JobListEmpty
-        searchQuery={searchQuery}
+        searchQuery={debouncedSearchQuery || searchQuery}
         onClearSearch={() => setSearchQuery('')}
       />
     );
-  };
+  }, [isLoading, isError, error?.message, debouncedSearchQuery, searchQuery, refetch]);
 
-  const renderJobItem = ({ item }: { item: Job }) => (
+  const renderJobItem = useCallback(({ item }: { item: Job }) => (
     <JobCard
       job={item}
       onPress={(selectedJob) => {
@@ -166,21 +93,98 @@ export default function HomeScreen() {
         console.log('Selected job for inspection:', selectedJob.id, selectedJob.title);
       }}
     />
-  );
+  ), []);
 
   return (
     <SafeAreaView
       edges={['top', 'left', 'right']}
       style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      {/* 
+        Fixed Top Header Section: App Bar, Search Input, and Results Heading.
+        Placed outside FlatList to guarantee that the SearchBar and TextInput NEVER
+        unmount, remount, or lose keyboard focus when typing or when list data updates.
+      */}
+      <View style={styles.headerContainer}>
+        {/* App Bar */}
+        <View style={styles.appBar}>
+          <View style={styles.brandGroup}>
+            <View
+              style={[
+                styles.brandIconWrapper,
+                { backgroundColor: isDark ? '#1E293B' : '#EEF2FF' },
+              ]}>
+              <Ionicons name="briefcase" size={22} color={isDark ? '#818CF8' : '#4F46E5'} />
+            </View>
+            <View>
+              <Text style={[styles.brandTitle, { color: colors.text }]}>JobFinder</Text>
+              <Text style={[styles.greetingSubtitle, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+                Find your next career move
+              </Text>
+            </View>
+          </View>
+
+          {/* User Pill with Sign Out */}
+          <View style={styles.userControlsGroup}>
+            <View
+              style={[
+                styles.userAvatar,
+                { backgroundColor: isDark ? '#3730A3' : '#4F46E5' },
+              ]}>
+              <Text style={styles.userAvatarText}>{initials || 'U'}</Text>
+            </View>
+
+            <TouchableOpacity
+              style={[
+                styles.signOutButton,
+                { backgroundColor: isDark ? '#1E293B' : '#F1F5F9' },
+              ]}
+              onPress={handleSignOut}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              accessibilityLabel="Sign out of JobFinder">
+              <Ionicons name="log-out-outline" size={20} color="#EF4444" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Stable Search Input Bar */}
+        <View style={styles.searchSection}>
+          <SearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Search by title, company, or city..."
+            onClear={() => setSearchQuery('')}
+          />
+        </View>
+
+        {/* Section Subheading & Result Counter */}
+        <View style={styles.subheadingRow}>
+          <Text style={[styles.sectionHeading, { color: colors.text }]}>
+            {searchQuery.trim().length > 0 ? 'Search Results' : 'Explore Jobs'}
+          </Text>
+          {!isLoading && !isError && (
+            <View
+              style={[
+                styles.countPill,
+                { backgroundColor: isDark ? '#1E293B' : '#F1F5F9' },
+              ]}>
+              <Text style={[styles.countText, { color: isDark ? '#818CF8' : '#4F46E5' }]}>
+                {jobs.length} {jobs.length === 1 ? 'job' : 'jobs'}
+              </Text>
+            </View>
+          )}
+        </View>
+      </View>
+
+      {/* Scrollable Job Listing Feed */}
       <FlatList
         data={isLoading || isError ? [] : jobs}
         keyExtractor={(item) => item.id}
         renderItem={renderJobItem}
-        ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmptyState}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         initialNumToRender={6}
         maxToRenderPerBatch={10}
         windowSize={5}
@@ -203,13 +207,10 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  listContent: {
-    paddingHorizontal: Spacing.four,
-    paddingBottom: Spacing.six,
-  },
   headerContainer: {
+    paddingHorizontal: Spacing.four,
     paddingTop: Spacing.two,
-    paddingBottom: Spacing.three,
+    paddingBottom: Spacing.two,
     gap: Spacing.three,
   },
   appBar: {
@@ -286,5 +287,10 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 12,
     fontWeight: '700',
+  },
+  listContent: {
+    paddingHorizontal: Spacing.four,
+    paddingTop: Spacing.one,
+    paddingBottom: Spacing.six,
   },
 });
