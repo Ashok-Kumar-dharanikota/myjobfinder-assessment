@@ -47,6 +47,7 @@ function RootNavigation() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="explore" options={{ headerShown: false }} />
+        <Stack.Screen name="job/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
         <Stack.Screen name="(auth)/login" options={{ headerShown: false, animation: 'fade' }} />
       </Stack>
     </ThemeProvider>

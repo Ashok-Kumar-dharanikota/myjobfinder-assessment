@@ -10,6 +10,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/context/auth-context';
 import { useJobs } from '@/hooks/use-jobs';
@@ -23,6 +24,7 @@ import { Colors, Spacing } from '@/constants/theme';
 import { Job } from '@/types/job';
 
 export default function HomeScreen() {
+  const router = useRouter();
   const scheme = useColorScheme();
   const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
   const isDark = scheme === 'dark';
@@ -84,16 +86,20 @@ export default function HomeScreen() {
     );
   }, [isLoading, isError, error?.message, debouncedSearchQuery, searchQuery, refetch]);
 
-  const renderJobItem = useCallback(({ item }: { item: Job }) => (
-    <JobCard
-      job={item}
-      onPress={(selectedJob) => {
-        // Job details screen navigation is scheduled for Phase 4
-        // Log selection for diagnostic validation
-        console.log('Selected job for inspection:', selectedJob.id, selectedJob.title);
-      }}
-    />
-  ), []);
+  const renderJobItem = useCallback(
+    ({ item }: { item: Job }) => (
+      <JobCard
+        job={item}
+        onPress={(selectedJob) => {
+          router.push({
+            pathname: '/job/[id]',
+            params: { id: selectedJob.id },
+          });
+        }}
+      />
+    ),
+    [router]
+  );
 
   return (
     <SafeAreaView

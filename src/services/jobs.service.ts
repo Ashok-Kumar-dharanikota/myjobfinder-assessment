@@ -36,3 +36,30 @@ export async function fetchJobs(searchQuery?: string): Promise<Job[]> {
 
   return (data as Job[]) || [];
 }
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Fetches a single active job by its unique UUID directly from Supabase.
+ *
+ * @param id Unique UUID of the job
+ * @returns Job object if found and active, or null if not found/invalid
+ */
+export async function fetchJobById(id: string): Promise<Job | null> {
+  if (!id || typeof id !== 'string' || !UUID_REGEX.test(id.trim())) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from('jobs')
+    .select('*')
+    .eq('id', id.trim())
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to fetch job detail: ${error.message}`);
+  }
+
+  return (data as Job) || null;
+}
